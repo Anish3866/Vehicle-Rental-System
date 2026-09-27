@@ -10,17 +10,49 @@ requireAdmin();
 // Handle Delete User
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
     $delete_user_id = (int)$_POST['delete_user_id'];
+    
+    $conn->begin_transaction();
     try {
+        // 1. Delete transactions linked to this user
+        $stmt = $conn->prepare("DELETE FROM transactions WHERE user_id = ?");
+        $stmt->bind_param("i", $delete_user_id);
+        $stmt->execute();
+        $stmt->close();
+
+        // 2. Delete payments linked to this user
+        $stmt = $conn->prepare("DELETE FROM payments WHERE user_id = ?");
+        $stmt->bind_param("i", $delete_user_id);
+        $stmt->execute();
+        $stmt->close();
+
+        // 3. Reset vehicles that were rented by this user back to available
+        $stmt = $conn->prepare("UPDATE vehicles SET status = 'available', updated_at = NOW() WHERE id IN (SELECT vehicle_id FROM bookings WHERE user_id = ? AND booking_status IN ('pending', 'confirmed'))");
+        $stmt->bind_param("i", $delete_user_id);
+        $stmt->execute();
+        $stmt->close();
+
+        // 4. Delete bookings linked to this user
+        $stmt = $conn->prepare("DELETE FROM bookings WHERE user_id = ?");
+        $stmt->bind_param("i", $delete_user_id);
+        $stmt->execute();
+        $stmt->close();
+
+        // 5. Delete the user (but not admins)
         $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role != 'admin'");
         $stmt->bind_param("i", $delete_user_id);
-        if ($stmt->execute()) {
-            setFlash('success', "User deleted successfully.");
+        $stmt->execute();
+        
+        if ($stmt->affected_rows > 0) {
+            $conn->commit();
+            setFlash('success', "User and all associated records deleted successfully.");
         } else {
-            setFlash('error', "Failed to delete user.");
+            $conn->rollback();
+            setFlash('error', "Failed to delete user. Admin accounts cannot be deleted.");
         }
         $stmt->close();
-    } catch (mysqli_sql_exception $e) {
-        setFlash('error', "Cannot delete user. They have associated records (bookings, payments) in the system.");
+    } catch (Exception $e) {
+        $conn->rollback();
+        setFlash('error', "Failed to delete user: " . $e->getMessage());
     }
     redirect('users.php');
 }
@@ -80,7 +112,7 @@ $users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_
                         <table class="table" id="usersTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>S.N.</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
@@ -90,9 +122,9 @@ $users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while($u = $users->fetch_assoc()): ?>
+                                <?php $sn = 1; while($u = $users->fetch_assoc()): ?>
                                 <tr>
-                                    <td>#<?php echo sanitize($u['id']); ?></td>
+                                    <td><?php echo $sn++; ?></td>
                                     <td><?php echo sanitize($u['full_name']); ?></td>
                                     <td><?php echo sanitize($u['email']); ?></td>
                                     <td><?php echo sanitize($u['phone']); ?></td>

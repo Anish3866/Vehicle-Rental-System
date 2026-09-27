@@ -23,7 +23,7 @@ if (!isset($current_page)) $current_page = '';
     <nav class="navbar">
         <div class="container navbar-container">
             <a href="<?php echo SITE_URL; ?>/index.php" class="navbar-brand">
-                <span class="brand-icon">&#128663;</span> <?php echo SITE_NAME; ?>
+                <?php echo SITE_NAME; ?>
             </a>
             
             <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
@@ -51,12 +51,11 @@ if (!isset($current_page)) $current_page = '';
                     <!-- Logged-in user links -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle <?php echo in_array($current_page, ['account', 'bookings', 'history']) ? 'active' : ''; ?>">
-                            <span class="user-icon">&#128100;</span> <?php echo sanitize($_SESSION['user_name']); ?> <span class="dropdown-arrow">&#9662;</span>
+                            <?php echo sanitize($_SESSION['user_name']); ?> <span class="dropdown-arrow">&#9662;</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="<?php echo SITE_URL; ?>/my-account.php">My Account</a></li>
                             <li><a href="<?php echo SITE_URL; ?>/my-bookings.php">My Bookings</a></li>
-                            <li><a href="<?php echo SITE_URL; ?>/history.php">Transaction History</a></li>
                             <?php if (isAdmin()): ?>
                                 <li class="dropdown-divider"></li>
                                 <li><a href="<?php echo SITE_URL; ?>/admin/index.php"><strong>Admin Dashboard</strong></a></li>

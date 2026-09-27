@@ -11,8 +11,7 @@ requireAdmin();
 $stats = [
     'users_total' => 0, 'users_active' => 0, 'users_disabled' => 0,
     'vehicles_total' => 0, 'vehicles_available' => 0, 'vehicles_rented' => 0, 'vehicles_maintenance' => 0,
-    'bookings_total' => 0, 'bookings_pending' => 0, 'bookings_confirmed' => 0, 'bookings_completed' => 0, 'bookings_cancelled' => 0,
-    'payments_success' => 0, 'payments_failed' => 0, 'total_revenue' => 0
+    'bookings_total' => 0, 'bookings_pending' => 0, 'bookings_confirmed' => 0, 'bookings_completed' => 0, 'bookings_cancelled' => 0
 ];
 
 // Users stats
@@ -40,16 +39,6 @@ while($row = $result->fetch_assoc()) {
     if($row['booking_status'] == 'confirmed') $stats['bookings_confirmed'] = $row['count'];
     if($row['booking_status'] == 'completed') $stats['bookings_completed'] = $row['count'];
     if($row['booking_status'] == 'cancelled') $stats['bookings_cancelled'] = $row['count'];
-}
-
-// Payments stats
-$result = $conn->query("SELECT status, COUNT(*) as count, SUM(amount) as total FROM payments GROUP BY status");
-while($row = $result->fetch_assoc()) {
-    if($row['status'] == 'completed') {
-        $stats['payments_success'] = $row['count'];
-        $stats['total_revenue'] = $row['total'];
-    }
-    if($row['status'] == 'failed') $stats['payments_failed'] = $row['count'];
 }
 
 // Recent Bookings
@@ -95,11 +84,6 @@ $recent_users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY c
                     <p class="stat-value"><?php echo $stats['users_total']; ?></p>
                     <p class="stat-desc">Active: <?php echo $stats['users_active']; ?> | Disabled: <?php echo $stats['users_disabled']; ?></p>
                 </div>
-                <div class="stat-card stat-success">
-                    <h3>Total Revenue</h3>
-                    <p class="stat-value"><?php echo formatCurrency($stats['total_revenue']); ?></p>
-                    <p class="stat-desc">Successful: <?php echo $stats['payments_success']; ?> | Failed: <?php echo $stats['payments_failed']; ?></p>
-                </div>
                 <div class="stat-card stat-warning">
                     <h3>Vehicles</h3>
                     <p class="stat-value"><?php echo $stats['vehicles_total']; ?></p>
@@ -108,7 +92,7 @@ $recent_users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY c
                 <div class="stat-card stat-info">
                     <h3>Bookings</h3>
                     <p class="stat-value"><?php echo $stats['bookings_total']; ?></p>
-                    <p class="stat-desc">Pend: <?php echo $stats['bookings_pending']; ?> | Conf: <?php echo $stats['bookings_confirmed']; ?> | Comp: <?php echo $stats['bookings_completed']; ?></p>
+                    <p class="stat-desc">Pend: <?php echo $stats['bookings_pending']; ?> | Appr: <?php echo $stats['bookings_confirmed']; ?> | Comp: <?php echo $stats['bookings_completed']; ?></p>
                 </div>
             </div>
 
@@ -138,7 +122,7 @@ $recent_users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY c
                                         <td><?php echo sanitize($b['vehicle_name']); ?></td>
                                         <td><?php echo formatDate($b['start_date']) . ' - ' . formatDate($b['end_date']); ?></td>
                                         <td><?php echo formatCurrency($b['total_amount']); ?></td>
-                                        <td><span class="badge badge-<?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo ucfirst(sanitize($b['booking_status'])); ?></span></td>
+                                        <td><span class="badge badge-<?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo $b['booking_status'] === 'confirmed' ? 'Approved' : ucfirst(sanitize($b['booking_status'])); ?></span></td>
                                     </tr>
                                     <?php endwhile; ?>
                                 </tbody>

@@ -72,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("iissidd", $user_id, $vehicle_id, $start_date, $end_date, $rental_days, $price_per_day, $total_amount);
             
             if ($stmt->execute()) {
-                $booking_id = $stmt->insert_id;
-                redirect("payment.php?booking_id={$booking_id}");
+                setFlash('success', 'Booking submitted successfully! Please wait for admin approval.');
+                redirect("my-bookings.php");
             } else {
                 setFlash('error', 'Failed to create booking. Please try again.');
             }
@@ -136,7 +136,7 @@ require_once 'includes/header.php';
                             <p class="mb-0">Total Amount: <strong id="display_total">Rs. 0.00</strong></p>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Proceed to Payment</button>
+                        <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
                     </form>
                 </div>
             </div>

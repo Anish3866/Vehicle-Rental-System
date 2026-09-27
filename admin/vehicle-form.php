@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
         
         $upload_result = uploadImage($_FILES['image'], $upload_dir);
-        if ($upload_result['success']) {
-            $image_name = $upload_result['filename'];
+        if ($upload_result !== false) {
+            $image_name = $upload_result;
         } else {
-            $errors[] = $upload_result['error'];
+            $errors[] = "Failed to upload image. Ensure it is a valid image under 5MB.";
         }
     }
     

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking_id']))
     $b_result = $stmt->get_result()->fetch_assoc();
     $stmt->close();
     
-    if ($b_result && $b_result['booking_status'] === 'pending' && $b_result['payment_status'] === 'unpaid') {
+    if ($b_result && in_array($b_result['booking_status'], ['pending', 'confirmed'])) {
         $conn->begin_transaction();
         try {
             $stmt = $conn->prepare("UPDATE bookings SET booking_status = 'cancelled', updated_at = NOW() WHERE id = ?");
@@ -67,31 +67,28 @@ require_once 'includes/header.php';
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Booking ID</th>
+                                <th>S.N.</th>
                                 <th>Vehicle</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Days</th>
                                 <th>Amount</th>
                                 <th>Status</th>
-                                <th>Payment</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($bookings as $b): ?>
+                            <?php $sn = 1; foreach ($bookings as $b): ?>
                                 <tr>
-                                    <td>#<?php echo $b['id']; ?></td>
+                                    <td><?php echo $sn++; ?></td>
                                     <td><?php echo sanitize($b['vehicle_name']); ?></td>
                                     <td><?php echo formatDate($b['start_date']); ?></td>
                                     <td><?php echo formatDate($b['end_date']); ?></td>
                                     <td><?php echo $b['rental_days']; ?></td>
                                     <td><?php echo formatCurrency($b['total_amount']); ?></td>
-                                    <td><span class="badge <?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo ucfirst($b['booking_status']); ?></span></td>
-                                    <td><span class="badge <?php echo getStatusBadgeClass($b['payment_status']); ?>"><?php echo ucfirst($b['payment_status']); ?></span></td>
+                                    <td><span class="badge <?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo $b['booking_status'] === 'confirmed' ? 'Approved' : ucfirst($b['booking_status']); ?></span></td>
                                     <td>
-                                        <?php if ($b['payment_status'] === 'unpaid' && $b['booking_status'] === 'pending'): ?>
-                                            <a href="payment.php?booking_id=<?php echo $b['id']; ?>" class="btn btn-sm btn-success mb-1">Pay Now</a>
+                                        <?php if ($b['booking_status'] === 'pending' || $b['booking_status'] === 'confirmed'): ?>
                                             <form action="my-bookings.php" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                                 <input type="hidden" name="cancel_booking_id" value="<?php echo $b['id']; ?>">
                                                 <button type="submit" class="btn btn-sm btn-danger mb-1">Cancel</button>

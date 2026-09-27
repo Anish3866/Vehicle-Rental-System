@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST[
             $upd->bind_param("i", $booking_id);
             $upd->execute();
             $upd->close();
-            setFlash('success', 'Booking confirmed.');
+            setFlash('success', 'Booking approved.');
         } 
         elseif ($action === 'complete') {
             $upd = $conn->prepare("UPDATE bookings SET booking_status='completed', updated_at=NOW() WHERE id=?");
@@ -42,10 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST[
             setFlash('success', 'Booking marked as completed.');
         }
         elseif ($action === 'cancel') {
-            $new_pay_status = $booking['payment_status'] === 'paid' ? 'refunded' : $booking['payment_status'];
-            
-            $upd = $conn->prepare("UPDATE bookings SET booking_status='cancelled', payment_status=?, updated_at=NOW() WHERE id=?");
-            $upd->bind_param("si", $new_pay_status, $booking_id);
+            $upd = $conn->prepare("UPDATE bookings SET booking_status='cancelled', updated_at=NOW() WHERE id=?");
+            $upd->bind_param("i", $booking_id);
             $upd->execute();
             $upd->close();
             
@@ -108,7 +106,7 @@ $bookings = $conn->query($query);
                         <select name="status" id="status" class="form-control" style="width: auto;" onchange="this.form.submit()">
                             <option value="">All</option>
                             <option value="pending" <?php echo $status_filter=='pending'?'selected':''; ?>>Pending</option>
-                            <option value="confirmed" <?php echo $status_filter=='confirmed'?'selected':''; ?>>Confirmed</option>
+                            <option value="confirmed" <?php echo $status_filter=='confirmed'?'selected':''; ?>>Approved</option>
                             <option value="completed" <?php echo $status_filter=='completed'?'selected':''; ?>>Completed</option>
                             <option value="cancelled" <?php echo $status_filter=='cancelled'?'selected':''; ?>>Cancelled</option>
                         </select>
@@ -122,28 +120,26 @@ $bookings = $conn->query($query);
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>S.N.</th>
                                     <th>User</th>
                                     <th>Vehicle</th>
                                     <th>Dates</th>
                                     <th>Days</th>
                                     <th>Amount</th>
                                     <th>Booking Status</th>
-                                    <th>Payment Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if($bookings->num_rows > 0): while($b = $bookings->fetch_assoc()): ?>
+                                <?php $sn = 1; if($bookings->num_rows > 0): while($b = $bookings->fetch_assoc()): ?>
                                 <tr>
-                                    <td>#<?php echo sanitize($b['id']); ?></td>
+                                    <td><?php echo $sn++; ?></td>
                                     <td><a href="user-details.php?id=<?php echo $b['user_id']; ?>"><?php echo sanitize($b['user_name']); ?></a></td>
                                     <td><?php echo sanitize($b['vehicle_name']); ?></td>
                                     <td><?php echo formatDate($b['start_date']) . ' <br>to<br> ' . formatDate($b['end_date']); ?></td>
                                     <td><?php echo sanitize($b['rental_days']); ?></td>
                                     <td><?php echo formatCurrency($b['total_amount']); ?></td>
-                                    <td><span class="badge badge-<?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo ucfirst(sanitize($b['booking_status'])); ?></span></td>
-                                    <td><span class="badge badge-<?php echo getStatusBadgeClass($b['payment_status']); ?>"><?php echo ucfirst(sanitize($b['payment_status'])); ?></span></td>
+                                    <td><span class="badge badge-<?php echo getStatusBadgeClass($b['booking_status']); ?>"><?php echo $b['booking_status'] === 'confirmed' ? 'Approved' : ucfirst(sanitize($b['booking_status'])); ?></span></td>
                                     <td>
                                         <?php if(in_array($b['booking_status'], ['pending', 'confirmed'])): ?>
                                         <form method="POST" action="bookings.php" class="d-inline-block">
@@ -151,7 +147,7 @@ $bookings = $conn->query($query);
                                             <select name="action" class="form-control form-control-sm d-inline-block w-auto" onchange="if(confirm('Are you sure?')) this.form.submit(); else this.selectedIndex = 0;">
                                                 <option value="">Update...</option>
                                                 <?php if($b['booking_status'] == 'pending'): ?>
-                                                <option value="confirm">Confirm</option>
+                                                <option value="confirm">Approve</option>
                                                 <?php endif; ?>
                                                 <?php if($b['booking_status'] == 'confirmed'): ?>
                                                 <option value="complete">Mark Completed</option>

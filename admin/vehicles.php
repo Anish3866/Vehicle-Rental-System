@@ -69,7 +69,7 @@ $vehicles = $conn->query($query);
             
             <div class="page-header d-flex justify-content-between align-items-center">
                 <h1>Manage Vehicles</h1>
-                <a href="vehicle-form.php" class="btn btn-primary">➕ Add Vehicle</a>
+                <a href="vehicle-form.php" class="btn btn-primary">Add Vehicle</a>
             </div>
 
             <div class="card mb-4">
