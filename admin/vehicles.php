@@ -35,17 +35,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
 // Filter
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
-$where = "1=1";
-if ($status_filter) {
-    $where .= " AND v.status = '" . $conn->real_escape_string($status_filter) . "'";
-}
+$allowed_statuses = ['available', 'rented', 'maintenance', 'unavailable'];
 
-$query = "SELECT v.*, c.name as category_name 
-          FROM vehicles v 
-          LEFT JOIN categories c ON v.category_id = c.id 
-          WHERE $where 
-          ORDER BY v.created_at DESC";
-$vehicles = $conn->query($query);
+if ($status_filter && in_array($status_filter, $allowed_statuses, true)) {
+    $query = "SELECT v.*, c.name as category_name 
+              FROM vehicles v 
+              LEFT JOIN categories c ON v.category_id = c.id 
+              WHERE v.status = ? 
+              ORDER BY v.created_at DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $status_filter);
+    $stmt->execute();
+    $vehicles = $stmt->get_result();
+    $stmt->close();
+} else {
+    $status_filter = '';
+    $vehicles = $conn->query("SELECT v.*, c.name as category_name 
+              FROM vehicles v 
+              LEFT JOIN categories c ON v.category_id = c.id 
+              ORDER BY v.created_at DESC");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -17,7 +17,19 @@ define('DB_NAME', 'vehicle_rental');
 // Application Settings
 // ============================================================
 define('SITE_NAME', 'Vehicle Rental System');
-define('SITE_URL', 'http://localhost/Project/Vehicle');
+
+// Dynamically determine base URL from the server environment
+$_scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$_host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$_script = $_SERVER['SCRIPT_NAME'] ?? '';
+// Walk up from the current script to the project root (one level above 'includes/', 'admin/', etc.)
+$_base   = dirname($_script);
+// If we are inside a subdirectory (e.g. admin/), go up one more level
+if (basename($_base) === 'admin') {
+    $_base = dirname($_base);
+}
+$_base = rtrim(str_replace('\\', '/', $_base), '/');
+define('SITE_URL', $_scheme . '://' . $_host . $_base);
 define('UPLOAD_PATH', __DIR__ . '/../uploads/vehicles/');
 define('UPLOAD_URL', SITE_URL . '/uploads/vehicles/');
 
@@ -60,7 +72,14 @@ define('KHALTI_LOOKUP_URL', KHALTI_SANDBOX
 // OTP: 987654
 
 // ============================================================
-// Error Reporting (Disable in production)
+// Error Reporting (Disable in production by setting to false)
 // ============================================================
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+define('APP_DEBUG', true);  // Set to false in production
+if (APP_DEBUG) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+}

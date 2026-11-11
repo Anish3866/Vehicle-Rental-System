@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price_per_day = (float)$_POST['price_per_day'];
     $description = trim($_POST['description']);
     $status = $_POST['status'];
-    $stock = (int)$_POST['stock'];
     
     $errors = [];
     
@@ -59,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         if ($is_edit) {
-            $stmt = $conn->prepare("UPDATE vehicles SET category_id=?, name=?, vehicle_number=?, brand=?, model_year=?, price_per_day=?, description=?, image=?, status=?, stock=?, updated_at=NOW() WHERE id=?");
-            $stmt->bind_param("issssdsssii", $category_id, $name, $vehicle_number, $brand, $model_year, $price_per_day, $description, $image_name, $status, $stock, $id);
+            $stmt = $conn->prepare("UPDATE vehicles SET category_id=?, name=?, vehicle_number=?, brand=?, model_year=?, price_per_day=?, description=?, image=?, status=?, updated_at=NOW() WHERE id=?");
+            $stmt->bind_param("issssdsssi", $category_id, $name, $vehicle_number, $brand, $model_year, $price_per_day, $description, $image_name, $status, $id);
         } else {
-            $stmt = $conn->prepare("INSERT INTO vehicles (category_id, name, vehicle_number, brand, model_year, price_per_day, description, image, status, stock, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-            $stmt->bind_param("issssdsssi", $category_id, $name, $vehicle_number, $brand, $model_year, $price_per_day, $description, $image_name, $status, $stock);
+            $stmt = $conn->prepare("INSERT INTO vehicles (category_id, name, vehicle_number, brand, model_year, price_per_day, description, image, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+            $stmt->bind_param("issssdsss", $category_id, $name, $vehicle_number, $brand, $model_year, $price_per_day, $description, $image_name, $status);
         }
         
         if ($stmt->execute()) {
@@ -146,11 +145,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4"><?php echo $is_edit ? sanitize($vehicle['description']) : ''; ?></textarea>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label class="form-label">Number of Stocks Available *</label>
-                            <input type="number" name="stock" class="form-control" min="0" value="<?php echo $is_edit ? sanitize($vehicle['stock']) : '1'; ?>" required>
                         </div>
                         
                         <div class="form-group mb-3">

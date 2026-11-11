@@ -12,6 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST[
     $booking_id = (int)$_POST['booking_id'];
     $action = $_POST['action'];
     
+    // Validate action against allowed values
+    if (!in_array($action, ['confirm', 'complete', 'cancel'], true)) {
+        setFlash('error', 'Invalid action.');
+        redirect('bookings.php');
+    }
+    
     $stmt = $conn->prepare("SELECT * FROM bookings WHERE id = ?");
     $stmt->bind_param("i", $booking_id);
     $stmt->execute();
@@ -60,20 +66,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST[
 
 // Filter
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
-$where = "1=1";
-if ($status_filter) {
-    $where .= " AND b.booking_status = '" . $conn->real_escape_string($status_filter) . "'";
-}
+$allowed_statuses = ['pending', 'confirmed', 'completed', 'cancelled'];
 
-$query = "
-    SELECT b.*, u.full_name as user_name, v.name as vehicle_name 
-    FROM bookings b 
-    JOIN users u ON b.user_id = u.id 
-    JOIN vehicles v ON b.vehicle_id = v.id 
-    WHERE $where 
-    ORDER BY b.created_at DESC
-";
-$bookings = $conn->query($query);
+if ($status_filter && in_array($status_filter, $allowed_statuses, true)) {
+    $query = "
+        SELECT b.*, u.full_name as user_name, v.name as vehicle_name 
+        FROM bookings b 
+        JOIN users u ON b.user_id = u.id 
+        JOIN vehicles v ON b.vehicle_id = v.id 
+        WHERE b.booking_status = ? 
+        ORDER BY b.created_at DESC
+    ";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $status_filter);
+    $stmt->execute();
+    $bookings = $stmt->get_result();
+    $stmt->close();
+} else {
+    $status_filter = '';
+    $bookings = $conn->query("
+        SELECT b.*, u.full_name as user_name, v.name as vehicle_name 
+        FROM bookings b 
+        JOIN users u ON b.user_id = u.id 
+        JOIN vehicles v ON b.vehicle_id = v.id 
+        ORDER BY b.created_at DESC
+    ");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

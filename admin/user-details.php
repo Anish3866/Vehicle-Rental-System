@@ -26,20 +26,28 @@ if (!$user) {
 }
 
 // User Bookings
-$bookings = $conn->query("
+$stmt = $conn->prepare("
     SELECT b.*, v.name as vehicle_name 
     FROM bookings b 
     JOIN vehicles v ON b.vehicle_id = v.id 
-    WHERE b.user_id = $user_id 
+    WHERE b.user_id = ? 
     ORDER BY b.created_at DESC
 ");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$bookings = $stmt->get_result();
+$stmt->close();
 
 // User Transactions
-$transactions = $conn->query("
+$stmt = $conn->prepare("
     SELECT * FROM transactions 
-    WHERE user_id = $user_id 
+    WHERE user_id = ? 
     ORDER BY created_at DESC
 ");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$transactions = $stmt->get_result();
+$stmt->close();
 
 ?>
 <!DOCTYPE html>
