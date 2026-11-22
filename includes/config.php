@@ -16,7 +16,7 @@ define('DB_NAME', 'vehicle_rental');
 // ============================================================
 // Application Settings
 // ============================================================
-define('SITE_NAME', 'Vehicle Rental System');
+define('SITE_NAME', 'RentRide');
 
 // Dynamically determine base URL from the server environment
 $_scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';

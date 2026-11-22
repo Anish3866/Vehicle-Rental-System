@@ -158,10 +158,28 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    text-decoration: none;
 }
 
 .navbar-brand:hover {
     color: var(--gray-300);
+}
+
+.brand-logo {
+    height: 34px;
+    width: 34px;
+    flex-shrink: 0;
+}
+
+.brand-text {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+}
+
+.brand-ride {
+    color: #4CAF50;
 }
 
 .brand-icon {

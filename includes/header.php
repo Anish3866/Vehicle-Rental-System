@@ -23,7 +23,14 @@ if (!isset($current_page)) $current_page = '';
     <nav class="navbar">
         <div class="container navbar-container">
             <a href="<?php echo SITE_URL; ?>/index.php" class="navbar-brand">
-                <?php echo SITE_NAME; ?>
+                <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" fill="none">
+                    <circle cx="22" cy="22" r="19" stroke="white" stroke-width="3" fill="none"/>
+                    <circle cx="22" cy="22" r="5.5" stroke="white" stroke-width="2" fill="none"/>
+                    <line x1="22" y1="3" x2="22" y2="16.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="5.5" y1="31.5" x2="17" y2="24.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="38.5" y1="31.5" x2="27" y2="24.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <span class="brand-text">Rent<span class="brand-ride">Ride</span></span>
             </a>
             
             <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
