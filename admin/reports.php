@@ -7,14 +7,12 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Bookings by status
 $bookings_status = [];
 $res = $conn->query("SELECT booking_status, COUNT(*) as count FROM bookings GROUP BY booking_status");
 while($row = $res->fetch_assoc()) {
     $bookings_status[$row['booking_status']] = $row['count'];
 }
 
-// Top 5 most booked vehicles
 $top_vehicles = $conn->query("
     SELECT v.name, v.vehicle_number, COUNT(b.id) as booking_count
     FROM vehicles v

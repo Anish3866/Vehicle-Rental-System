@@ -8,7 +8,6 @@ require_once 'includes/functions.php';
 requireLogin();
 $user_id = $_SESSION['user_id'];
 
-// Handle Profile Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['full_name'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
@@ -21,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssi", $name, $phone, $address, $user_id);
         
         if ($stmt->execute()) {
-            $_SESSION['user_name'] = $name; // Update session
+            $_SESSION['user_name'] = $name;
             setFlash('success', 'Profile updated successfully.');
         } else {
             setFlash('error', 'Failed to update profile.');
@@ -31,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch User
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -43,7 +41,6 @@ if (!$user) {
     redirect('index.php');
 }
 
-// Fetch Account Summary
 $stmt = $conn->prepare("SELECT COUNT(*) as total_bookings, SUM(total_amount) as total_spent FROM bookings WHERE user_id = ? AND booking_status != 'cancelled'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();

@@ -7,14 +7,12 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Statistics queries
 $stats = [
     'users_total' => 0, 'users_active' => 0, 'users_disabled' => 0,
     'vehicles_total' => 0, 'vehicles_available' => 0, 'vehicles_rented' => 0, 'vehicles_maintenance' => 0,
     'bookings_total' => 0, 'bookings_pending' => 0, 'bookings_confirmed' => 0, 'bookings_completed' => 0, 'bookings_cancelled' => 0
 ];
 
-// Users stats
 $result = $conn->query("SELECT status, COUNT(*) as count FROM users WHERE role = 'user' GROUP BY status");
 while($row = $result->fetch_assoc()) {
     $stats['users_total'] += $row['count'];
@@ -22,7 +20,6 @@ while($row = $result->fetch_assoc()) {
     if($row['status'] == 'disabled') $stats['users_disabled'] = $row['count'];
 }
 
-// Vehicles stats
 $result = $conn->query("SELECT status, COUNT(*) as count FROM vehicles GROUP BY status");
 while($row = $result->fetch_assoc()) {
     $stats['vehicles_total'] += $row['count'];
@@ -31,7 +28,6 @@ while($row = $result->fetch_assoc()) {
     if($row['status'] == 'maintenance') $stats['vehicles_maintenance'] = $row['count'];
 }
 
-// Bookings stats
 $result = $conn->query("SELECT booking_status, COUNT(*) as count FROM bookings GROUP BY booking_status");
 while($row = $result->fetch_assoc()) {
     $stats['bookings_total'] += $row['count'];
@@ -41,7 +37,6 @@ while($row = $result->fetch_assoc()) {
     if($row['booking_status'] == 'cancelled') $stats['bookings_cancelled'] = $row['count'];
 }
 
-// Recent Bookings
 $recent_bookings = $conn->query("
     SELECT b.*, u.full_name as user_name, v.name as vehicle_name 
     FROM bookings b 
@@ -50,7 +45,6 @@ $recent_bookings = $conn->query("
     ORDER BY b.created_at DESC LIMIT 10
 ");
 
-// Recent Users
 $recent_users = $conn->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_at DESC LIMIT 5");
 
 ?>

@@ -7,37 +7,31 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Handle Delete User
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
     $delete_user_id = (int)$_POST['delete_user_id'];
     
     $conn->begin_transaction();
     try {
-        // 1. Delete transactions linked to this user
         $stmt = $conn->prepare("DELETE FROM transactions WHERE user_id = ?");
         $stmt->bind_param("i", $delete_user_id);
         $stmt->execute();
         $stmt->close();
 
-        // 2. Delete payments linked to this user
         $stmt = $conn->prepare("DELETE FROM payments WHERE user_id = ?");
         $stmt->bind_param("i", $delete_user_id);
         $stmt->execute();
         $stmt->close();
 
-        // 3. Reset vehicles that were rented by this user back to available
         $stmt = $conn->prepare("UPDATE vehicles SET status = 'available', updated_at = NOW() WHERE id IN (SELECT vehicle_id FROM bookings WHERE user_id = ? AND booking_status IN ('pending', 'confirmed'))");
         $stmt->bind_param("i", $delete_user_id);
         $stmt->execute();
         $stmt->close();
 
-        // 4. Delete bookings linked to this user
         $stmt = $conn->prepare("DELETE FROM bookings WHERE user_id = ?");
         $stmt->bind_param("i", $delete_user_id);
         $stmt->execute();
         $stmt->close();
 
-        // 5. Delete the user (but not admins)
         $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role != 'admin'");
         $stmt->bind_param("i", $delete_user_id);
         $stmt->execute();
@@ -57,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
     redirect('users.php');
 }
 
-// Handle status update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['action'])) {
     $user_id = (int)$_POST['user_id'];
     $action = $_POST['action'];

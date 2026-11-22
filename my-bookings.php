@@ -8,11 +8,9 @@ require_once 'includes/functions.php';
 requireLogin();
 $user_id = $_SESSION['user_id'];
 
-// Handle Cancel Request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking_id'])) {
     $cancel_id = (int)$_POST['cancel_booking_id'];
     
-    // Verify booking belongs to user and is pending/unpaid
     $stmt = $conn->prepare("SELECT vehicle_id, booking_status, payment_status FROM bookings WHERE id = ? AND user_id = ?");
     $stmt->bind_param("ii", $cancel_id, $user_id);
     $stmt->execute();
@@ -27,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking_id']))
             $stmt->execute();
             $stmt->close();
             
-            // Also revert vehicle status if needed (though it should be available if booking is just pending, but let's ensure)
             $stmt = $conn->prepare("UPDATE vehicles SET status = 'available', updated_at = NOW() WHERE id = ?");
             $stmt->bind_param("i", $b_result['vehicle_id']);
             $stmt->execute();
@@ -45,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking_id']))
     redirect('my-bookings.php');
 }
 
-// Fetch bookings
 $stmt = $conn->prepare("SELECT b.*, v.name as vehicle_name FROM bookings b JOIN vehicles v ON b.vehicle_id = v.id WHERE b.user_id = ? ORDER BY b.created_at DESC");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();

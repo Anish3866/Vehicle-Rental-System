@@ -1,11 +1,3 @@
-/**
- * Vehicle Rental System - Main JavaScript
- * Handles navigation, form validation, and interactive features.
- */
-
-// ============================================================
-// Mobile Navigation Toggle
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
@@ -15,8 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.classList.toggle('show');
             navToggle.classList.toggle('active');
         });
-        
-        // Close menu when clicking outside
+
         document.addEventListener('click', function(e) {
             if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
                 navMenu.classList.remove('show');
@@ -24,8 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Auto-dismiss flash messages after 5 seconds
+
     const flashMsg = document.getElementById('flashMessage');
     if (flashMsg) {
         setTimeout(function() {
@@ -36,10 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
-// ============================================================
-// Registration Form Validation
-// ============================================================
 function validateRegistrationForm(form) {
     clearErrors(form);
     let isValid = true;
@@ -93,10 +79,6 @@ function validateRegistrationForm(form) {
     return isValid;
 }
 
-
-// ============================================================
-// Login Form Validation
-// ============================================================
 function validateLoginForm(form) {
     clearErrors(form);
     let isValid = true;
@@ -120,10 +102,6 @@ function validateLoginForm(form) {
     return isValid;
 }
 
-
-// ============================================================
-// Booking Form Validation & Price Calculator
-// ============================================================
 function validateBookingForm(form) {
     clearErrors(form);
     let isValid = true;
@@ -152,9 +130,6 @@ function validateBookingForm(form) {
     return isValid;
 }
 
-/**
- * Calculate and display rental price
- */
 function calculateRentalPrice() {
     const startDate = document.getElementById('start_date');
     const endDate = document.getElementById('end_date');
@@ -182,10 +157,6 @@ function calculateRentalPrice() {
     }
 }
 
-
-// ============================================================
-// Contact Form Validation
-// ============================================================
 function validateContactForm(form) {
     clearErrors(form);
     let isValid = true;
@@ -218,10 +189,6 @@ function validateContactForm(form) {
     return isValid;
 }
 
-
-// ============================================================
-// Confirmation Dialogs
-// ============================================================
 function confirmDelete(message) {
     return confirm(message || 'Are you sure you want to delete this item? This action cannot be undone.');
 }
@@ -230,10 +197,6 @@ function confirmAction(message) {
     return confirm(message || 'Are you sure you want to proceed?');
 }
 
-
-// ============================================================
-// Helper Functions
-// ============================================================
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -255,19 +218,14 @@ function clearErrors(form) {
     form.querySelectorAll('.form-error').forEach(el => el.remove());
 }
 
-
-// ============================================================
-// Payment Method Tab Switching
-// ============================================================
 function switchPaymentTab(method) {
-    // Update tab buttons
+
     document.querySelectorAll('.payment-tab').forEach(tab => {
         tab.classList.remove('active');
     });
     const activeTab = document.querySelector('[data-method="' + method + '"]');
     if (activeTab) activeTab.classList.add('active');
-    
-    // Update tab content
+
     document.querySelectorAll('.payment-pane').forEach(pane => {
         pane.classList.remove('active');
     });
@@ -275,10 +233,6 @@ function switchPaymentTab(method) {
     if (activePane) activePane.classList.add('active');
 }
 
-
-// ============================================================
-// Admin: Search/Filter Tables
-// ============================================================
 function filterTable(inputId, tableId) {
     const filter = document.getElementById(inputId).value.toLowerCase();
     const table = document.getElementById(tableId);

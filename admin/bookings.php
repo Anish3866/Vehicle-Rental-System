@@ -7,12 +7,10 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Handle status update POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST['action'])) {
     $booking_id = (int)$_POST['booking_id'];
     $action = $_POST['action'];
     
-    // Validate action against allowed values
     if (!in_array($action, ['confirm', 'complete', 'cancel'], true)) {
         setFlash('error', 'Invalid action.');
         redirect('bookings.php');
@@ -64,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST[
     redirect('bookings.php');
 }
 
-// Filter
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 $allowed_statuses = ['pending', 'confirmed', 'completed', 'cancelled'];
 

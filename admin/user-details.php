@@ -25,7 +25,6 @@ if (!$user) {
     redirect('users.php');
 }
 
-// User Bookings
 $stmt = $conn->prepare("
     SELECT b.*, v.name as vehicle_name 
     FROM bookings b 
@@ -38,7 +37,6 @@ $stmt->execute();
 $bookings = $stmt->get_result();
 $stmt->close();
 
-// User Transactions
 $stmt = $conn->prepare("
     SELECT * FROM transactions 
     WHERE user_id = ? 

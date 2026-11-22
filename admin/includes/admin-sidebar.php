@@ -9,6 +9,7 @@
             <li><a href="vehicles.php" class="<?php echo ($current_page == 'vehicles') ? 'active' : ''; ?>">Vehicles</a></li>
             <li><a href="categories.php" class="<?php echo ($current_page == 'categories') ? 'active' : ''; ?>">Categories</a></li>
             <li><a href="bookings.php" class="<?php echo ($current_page == 'bookings') ? 'active' : ''; ?>">Bookings</a></li>
+            <li><a href="messages.php" class="<?php echo ($current_page == 'messages') ? 'active' : ''; ?>">Messages</a></li>
             <li><a href="reports.php" class="<?php echo ($current_page == 'reports') ? 'active' : ''; ?>">Reports</a></li>
         </ul>
     </nav>

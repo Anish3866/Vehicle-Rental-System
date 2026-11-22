@@ -1,10 +1,4 @@
 <?php
-/**
- * Site Header
- * Includes HTML head, navigation bar, and flash message display.
- * Set $page_title and $current_page before including this file.
- */
-
 if (!isset($page_title)) $page_title = SITE_NAME;
 if (!isset($current_page)) $current_page = '';
 ?>
@@ -16,10 +10,9 @@ if (!isset($current_page)) $current_page = '';
     <meta name="description" content="Vehicle Rental System - Rent two-wheelers and four-wheelers at affordable prices in Nepal.">
     <title><?php echo sanitize($page_title); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container navbar-container">
             <a href="<?php echo SITE_URL; ?>/index.php" class="navbar-brand">
@@ -55,7 +48,6 @@ if (!isset($current_page)) $current_page = '';
                 <li><a href="<?php echo SITE_URL; ?>/contact.php" class="<?php echo $current_page === 'contact' ? 'active' : ''; ?>">Contact</a></li>
                 
                 <?php if (isLoggedIn()): ?>
-                    <!-- Logged-in user links -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle <?php echo in_array($current_page, ['account', 'bookings', 'history']) ? 'active' : ''; ?>">
                             <?php echo sanitize($_SESSION['user_name']); ?> <span class="dropdown-arrow">&#9662;</span>
@@ -72,7 +64,6 @@ if (!isset($current_page)) $current_page = '';
                         </ul>
                     </li>
                 <?php else: ?>
-                    <!-- Guest links -->
                     <li><a href="<?php echo SITE_URL; ?>/login.php" class="<?php echo $current_page === 'login' ? 'active' : ''; ?>">Login</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/register.php" class="btn btn-primary btn-sm <?php echo $current_page === 'register' ? 'active' : ''; ?>">Register</a></li>
                 <?php endif; ?>
@@ -80,7 +71,6 @@ if (!isset($current_page)) $current_page = '';
         </div>
     </nav>
     
-    <!-- Flash Messages -->
     <?php $flash = getFlash(); ?>
     <?php if ($flash): ?>
         <div class="container">
@@ -91,5 +81,4 @@ if (!isset($current_page)) $current_page = '';
         </div>
     <?php endif; ?>
     
-    <!-- Main Content -->
     <main class="main-content">

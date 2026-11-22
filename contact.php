@@ -13,7 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = trim($_POST['message'] ?? '');
 
     if (!empty($name) && !empty($email) && !empty($subject) && !empty($message)) {
-        setFlash('success', 'Thank you for your message. We will get back to you shortly.');
+        $stmt = $conn->prepare("INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $name, $email, $subject, $message);
+        if ($stmt->execute()) {
+            setFlash('success', 'Thank you for your message. We will get back to you shortly.');
+        } else {
+            setFlash('error', 'Something went wrong. Please try again later.');
+        }
+        $stmt->close();
     } else {
         setFlash('error', 'Please fill all the fields.');
     }

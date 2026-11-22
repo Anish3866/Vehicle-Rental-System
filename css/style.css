@@ -1,24 +1,15 @@
-/**
- * Vehicle Rental System - Main Stylesheet
- * Clean, professional design suitable for a university project.
- * Color Scheme: Navy primary, white backgrounds, subtle grays.
- */
-
-/* ============================================================
-   CSS VARIABLES / DESIGN TOKENS
-   ============================================================ */
 :root {
-    /* Primary Colors */
+    
     --primary: #1a3a5c;
     --primary-dark: #122a42;
     --primary-light: #2a5a8c;
     --primary-hover: #1e4470;
 
-    /* Accent */
+    
     --accent: #e8a735;
     --accent-dark: #c88e20;
 
-    /* Neutrals */
+    
     --white: #ffffff;
     --gray-50: #f8f9fa;
     --gray-100: #f1f3f5;
@@ -31,7 +22,7 @@
     --gray-800: #343a40;
     --gray-900: #212529;
 
-    /* Status Colors */
+    
     --success: #28a745;
     --success-light: #d4edda;
     --danger: #dc3545;
@@ -41,7 +32,7 @@
     --info: #17a2b8;
     --info-light: #d1ecf1;
 
-    /* Typography */
+    
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -50,7 +41,7 @@
     --font-size-2xl: 1.5rem;
     --font-size-3xl: 2rem;
 
-    /* Spacing */
+    
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -58,7 +49,7 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
 
-    /* Layout */
+    
     --max-width: 1200px;
     --border-radius: 6px;
     --border-radius-lg: 10px;
@@ -68,9 +59,6 @@
     --transition: all 0.2s ease;
 }
 
-/* ============================================================
-   RESET & BASE STYLES
-   ============================================================ */
 *,
 *::before,
 *::after {
@@ -123,18 +111,12 @@ h1, h2, h3, h4, h5, h6 {
     flex: 1;
 }
 
-/* ============================================================
-   CONTAINER
-   ============================================================ */
 .container {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
 }
 
-/* ============================================================
-   NAVIGATION BAR
-   ============================================================ */
 .navbar {
     background: var(--primary-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -213,7 +195,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.1em;
 }
 
-/* Dropdown */
 .dropdown {
     position: relative;
 }
@@ -267,7 +248,6 @@ h1, h2, h3, h4, h5, h6 {
     margin: var(--spacing-xs) 0;
 }
 
-/* Mobile Toggle */
 .navbar-toggle {
     display: none;
     flex-direction: column;
@@ -285,9 +265,6 @@ h1, h2, h3, h4, h5, h6 {
     transition: var(--transition);
 }
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -411,9 +388,6 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
-/* ============================================================
-   ALERTS / FLASH MESSAGES
-   ============================================================ */
 .alert {
     padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--border-radius);
@@ -463,9 +437,6 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
 }
 
-/* ============================================================
-   CARDS
-   ============================================================ */
 .card {
     background: var(--white);
     border: 1px solid var(--gray-200);
@@ -496,9 +467,6 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--gray-50);
 }
 
-/* ============================================================
-   FORMS
-   ============================================================ */
 .form-group {
     margin-bottom: var(--spacing-lg);
 }
@@ -568,9 +536,6 @@ select.form-control {
     padding-right: 36px;
 }
 
-/* ============================================================
-   TABLES
-   ============================================================ */
 .table-responsive {
     overflow-x: auto;
 }
@@ -608,9 +573,6 @@ select.form-control {
     white-space: nowrap;
 }
 
-/* ============================================================
-   BADGES
-   ============================================================ */
 .badge {
     display: inline-block;
     padding: 3px 10px;
@@ -645,9 +607,6 @@ select.form-control {
     color: var(--gray-700);
 }
 
-/* ============================================================
-   PAGE HEADER
-   ============================================================ */
 .page-header {
     padding: var(--spacing-2xl) 0 var(--spacing-xl);
 }
@@ -670,14 +629,13 @@ select.form-control {
     gap: var(--spacing-md);
 }
 
-/* ============================================================
-   HERO SECTION
-   ============================================================ */
 .hero-section {
-    background: var(--primary);
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+                url('../images/hero-bg.jpg') center/cover no-repeat;
     color: var(--white);
-    padding: 80px 0;
+    padding: 100px 0;
     text-align: center;
+    position: relative;
 }
 
 .hero-section h1 {
@@ -711,9 +669,6 @@ select.form-control {
     background: var(--accent-dark);
 }
 
-/* ============================================================
-   VEHICLE CARDS & GRID
-   ============================================================ */
 .vehicle-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -779,9 +734,6 @@ select.form-control {
     color: var(--gray-600);
 }
 
-/* ============================================================
-   HOW IT WORKS SECTION
-   ============================================================ */
 .section {
     padding: var(--spacing-2xl) 0;
 }
@@ -832,7 +784,6 @@ select.form-control {
     font-size: var(--font-size-sm);
 }
 
-/* Category Cards */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -868,9 +819,6 @@ select.form-control {
     margin-bottom: var(--spacing-lg);
 }
 
-/* ============================================================
-   STATS GRID (Dashboard)
-   ============================================================ */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -918,9 +866,6 @@ select.form-control {
     border-left: 4px solid var(--info);
 }
 
-/* ============================================================
-   PAYMENT TABS
-   ============================================================ */
 .payment-tabs {
     display: flex;
     border-bottom: 2px solid var(--gray-200);
@@ -958,7 +903,6 @@ select.form-control {
     display: block;
 }
 
-/* Card Validation Feedback */
 .card-feedback {
     font-size: var(--font-size-sm);
     margin-top: var(--spacing-xs);
@@ -980,9 +924,6 @@ select.form-control {
     margin-left: var(--spacing-sm);
 }
 
-/* ============================================================
-   VEHICLE DETAIL PAGE
-   ============================================================ */
 .vehicle-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1027,9 +968,6 @@ select.form-control {
     font-weight: 500;
 }
 
-/* ============================================================
-   BOOKING SUMMARY
-   ============================================================ */
 .booking-summary {
     background: var(--gray-50);
     border: 1px solid var(--gray-200);
@@ -1059,9 +997,6 @@ select.form-control {
     color: var(--primary);
 }
 
-/* ============================================================
-   AUTH PAGES (Login/Register)
-   ============================================================ */
 .auth-container {
     max-width: 480px;
     margin: var(--spacing-2xl) auto;
@@ -1085,9 +1020,6 @@ select.form-control {
     font-size: var(--font-size-sm);
 }
 
-/* ============================================================
-   ABOUT PAGE
-   ============================================================ */
 .about-content {
     max-width: 800px;
     margin: 0 auto;
@@ -1104,9 +1036,6 @@ select.form-control {
     color: var(--gray-700);
 }
 
-/* ============================================================
-   CONTACT PAGE
-   ============================================================ */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1139,9 +1068,6 @@ select.form-control {
     font-size: var(--font-size-sm);
 }
 
-/* ============================================================
-   ADMIN LAYOUT
-   ============================================================ */
 .admin-body {
     background: var(--gray-100);
 }
@@ -1151,7 +1077,6 @@ select.form-control {
     min-height: 100vh;
 }
 
-/* Admin Sidebar */
 .admin-sidebar {
     width: 260px;
     background: var(--primary-dark);
@@ -1231,7 +1156,6 @@ select.form-control {
     color: var(--white);
 }
 
-/* Admin Content Area */
 .admin-content {
     flex: 1;
     margin-left: 260px;
@@ -1243,9 +1167,6 @@ select.form-control {
     padding-top: var(--spacing-md);
 }
 
-/* ============================================================
-   FILTER BAR
-   ============================================================ */
 .filter-bar {
     display: flex;
     gap: var(--spacing-md);
@@ -1262,9 +1183,6 @@ select.form-control {
     max-width: 200px;
 }
 
-/* ============================================================
-   EMPTY STATE
-   ============================================================ */
 .empty-state {
     text-align: center;
     padding: var(--spacing-2xl);
@@ -1286,9 +1204,6 @@ select.form-control {
     margin: 0 auto var(--spacing-lg);
 }
 
-/* ============================================================
-   PAGINATION
-   ============================================================ */
 .pagination {
     display: flex;
     gap: var(--spacing-xs);
@@ -1316,9 +1231,6 @@ select.form-control {
     border-color: var(--primary);
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
 .footer {
     background: var(--gray-900);
     color: rgba(255, 255, 255, 0.7);
@@ -1377,9 +1289,6 @@ select.form-control {
     font-size: var(--font-size-sm);
 }
 
-/* ============================================================
-   UTILITY CLASSES
-   ============================================================ */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-muted { color: var(--gray-600); }
@@ -1395,9 +1304,6 @@ select.form-control {
 .p-1 { padding: var(--spacing-md); }
 .p-2 { padding: var(--spacing-xl); }
 
-/* ============================================================
-   RESPONSIVE DESIGN
-   ============================================================ */
 @media (max-width: 992px) {
     .vehicle-detail {
         grid-template-columns: 1fr;
@@ -1411,7 +1317,7 @@ select.form-control {
         grid-template-columns: 1fr 1fr;
     }
 
-    /* Admin sidebar */
+    
     .admin-sidebar {
         width: 220px;
     }
@@ -1482,7 +1388,7 @@ select.form-control {
         align-items: flex-start;
     }
 
-    /* Admin layout */
+    
     .admin-sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
@@ -1510,8 +1416,6 @@ select.form-control {
         border-bottom: none;
     }
 
-
-
     .payment-tab {
         border-bottom: 1px solid var(--gray-200);
         border-left: 2px solid transparent;
@@ -1538,9 +1442,6 @@ select.form-control {
     }
 }
 
-/* ============================================================
-   UTILITY CLASSES
-   ============================================================ */
 .d-flex {
     display: flex !important;
 }

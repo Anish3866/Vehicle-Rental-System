@@ -1,4 +1,3 @@
--- Create and select the database
 CREATE DATABASE IF NOT EXISTS vehicle_rental
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
@@ -132,6 +131,18 @@ CREATE TABLE IF NOT EXISTS transactions (
 
 INSERT INTO users (full_name, email, phone, address, password, role, status) VALUES
 ('Anish Admin', 'anish206195@gmail.com', '9800000000', 'Kathmandu, Nepal', '$2y$10$zwV/1FwftFRwMWeMBd7/5eZHIjXDwNVBj7hmyW8xDMjhoGCY72ola', 'admin', 'active');
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_messages_read (is_read),
+    INDEX idx_messages_date (created_at)
+) ENGINE=InnoDB;
 
 INSERT INTO users (full_name, email, phone, address, password, role, status) VALUES
 ('Ram Sharma', 'ram@example.com', '9812345678', 'Pokhara, Nepal', '$2y$10$BxA/cTqs1tuZmd0rsNDUfOkCV0TT/m3NwqBaltBNUis.QQt4FZYBO', 'user', 'active'),

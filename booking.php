@@ -14,7 +14,6 @@ if (!$vehicle_id) {
     redirect('index.php');
 }
 
-// Fetch vehicle
 $stmt = $conn->prepare("SELECT v.*, c.name as category_name FROM vehicles v LEFT JOIN categories c ON v.category_id = c.id WHERE v.id = ? AND v.status = 'available'");
 $stmt->bind_param("i", $vehicle_id);
 $stmt->execute();
@@ -28,7 +27,6 @@ if (!$vehicle) {
 
 $user_id = $_SESSION['user_id'];
 
-// Check user status
 $stmt = $conn->prepare("SELECT status FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -53,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($end_date <= $start_date) {
         setFlash('error', 'End date must be after the start date.');
     } else {
-        // Check overlapping bookings
         $stmt = $conn->prepare("SELECT id FROM bookings WHERE vehicle_id = ? AND booking_status != 'cancelled' AND start_date <= ? AND end_date >= ?");
         $stmt->bind_param("iss", $vehicle_id, $end_date, $start_date);
         $stmt->execute();
@@ -63,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($overlap) {
             setFlash('error', 'The vehicle is already booked for the selected dates.');
         } else {
-            // Calculate details
             $rental_days = calculateRentalDays($start_date, $end_date);
             $price_per_day = $vehicle['price_per_day'];
             $total_amount = $rental_days * $price_per_day;

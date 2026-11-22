@@ -7,7 +7,6 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Handle Delete
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
     
@@ -32,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     redirect('categories.php');
 }
 
-// Handle Add/Edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
     $cat_id = isset($_POST['cat_id']) ? (int)$_POST['cat_id'] : 0;
     $name = trim($_POST['name']);
@@ -63,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
     }
 }
 
-// Get category for editing
 $edit_cat = null;
 if (isset($_GET['edit'])) {
     $edit_id = (int)$_GET['edit'];

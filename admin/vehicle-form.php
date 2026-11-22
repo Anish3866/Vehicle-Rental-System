@@ -42,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Please fill in all required fields.";
     }
     
-    // Handle image upload
     $image_name = $is_edit ? $vehicle['image'] : '';
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
         $upload_dir = '../uploads/';

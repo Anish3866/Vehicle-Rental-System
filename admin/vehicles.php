@@ -7,11 +7,9 @@ require_once '../includes/db.php';
 require_once '../includes/functions.php';
 requireAdmin();
 
-// Handle Delete
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
     
-    // Check for active bookings
     $check = $conn->prepare("SELECT COUNT(*) as cnt FROM bookings WHERE vehicle_id = ? AND booking_status IN ('pending', 'confirmed')");
     $check->bind_param("i", $delete_id);
     $check->execute();
@@ -33,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     redirect('vehicles.php');
 }
 
-// Filter
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 $allowed_statuses = ['available', 'rented', 'maintenance', 'unavailable'];
 
